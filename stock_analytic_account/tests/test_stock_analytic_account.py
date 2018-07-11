@@ -23,7 +23,6 @@ class TestStockAnalyticAccount(common.TransactionCase):
         })
         self.analytic_account = self.env.ref('analytic.analytic_agrolait')
         self.warehouse = self.env.ref('stock.warehouse0')
-        self.location = self.warehouse.lot_stock_id
         self.dest_location = self.env.ref('stock.stock_location_customers')
         self.outgoing_picking_type = self.env.ref('stock.picking_type_out')
 
@@ -33,7 +32,11 @@ class TestStockAnalyticAccount(common.TransactionCase):
             'new_quantity': 500,
         })
         product_qty.change_product_qty()
-
+        vals = {
+            'name': self.analytic_account.name,
+            'analytic_account_id': self.analytic_account.id
+        }
+        self.location = self.env['stock.location'].create(vals)
         # create Picking
         picking_data = {
             'partner_id': self.partner_id.id,
